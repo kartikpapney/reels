@@ -1,0 +1,192 @@
+/* src/components/EnhancedReels.module.css */
+.container {
+    height: 100vh;
+    width: 100%;
+    background-color: black;
+    position: relative;
+    overflow: hidden;
+}
+
+.scrollContainer {
+    height: 100%;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.scrollContainer::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+.slide {
+    height: 100vh;
+    width: 100%;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    background: linear-gradient(135deg, #4a00e0, #8e2de2);
+}
+
+.slide:nth-child(2) {
+    background: linear-gradient(135deg, #8e2de2, #2962ff);
+}
+
+.slide:nth-child(3) {
+    background: linear-gradient(135deg, #2962ff, #0091ea);
+}
+
+.slide:nth-child(4) {
+    background: linear-gradient(135deg, #0091ea, #d500f9);
+}
+
+.contentWrapper {
+    height: 100%;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.textContainer {
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+    padding: 24px;
+    border-radius: 16px;
+    max-width: 90%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.text {
+    font-size: 22px;
+    color: white;
+    line-height: 1.6;
+    margin: 0;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Progress indicator */
+.progressContainer {
+    position: fixed;
+    top: 16px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    z-index: 10;
+}
+
+.progressDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.progressActive {
+    width: 24px;
+    height: 8px;
+    border-radius: 4px;
+    background-color: white;
+}
+
+/* Text-to-speech controls */
+.audioControls {
+    position: fixed;
+    bottom: 24px;
+    right: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    z-index: 10;
+}
+
+.audioButton {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 2px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.audioButton:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+    transform: scale(1.05);
+}
+
+.speaking {
+    background-color: rgba(255, 0, 0, 0.5);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+}
+
+.audioToggle {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 14px;
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.autoActive {
+    background-color: rgba(0, 128, 0, 0.6);
+}
+
+/* Swipe indicator */
+.swipeIndicator {
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    font-size: 14px;
+    animation: bounce 1.5s infinite;
+    z-index: 10;
+}
+
+@keyframes bounce {
+    0%,
+    100% {
+        transform: translateY(0) translateX(-50%);
+    }
+    50% {
+        transform: translateY(-10px) translateX(-50%);
+    }
+}
