@@ -27,20 +27,10 @@
     flex-direction: column;
     justify-content: space-between;
     position: relative;
-    background: linear-gradient(135deg, #4a00e0, #8e2de2);
+    background: linear-gradient(135deg, #2c2c2c, #434343);
+
 }
 
-.slide:nth-child(2) {
-    background: linear-gradient(135deg, #8e2de2, #2962ff);
-}
-
-.slide:nth-child(3) {
-    background: linear-gradient(135deg, #2962ff, #0091ea);
-}
-
-.slide:nth-child(4) {
-    background: linear-gradient(135deg, #0091ea, #d500f9);
-}
 
 .contentWrapper {
     height: 100%;
