@@ -35,7 +35,7 @@ export default function EnhancedReels() {
                 setLoadingMore(true);
             }
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api`);
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`);
 
             if (!response.ok) {
                 throw new Error(`Failed to fetch reels: ${response.status}`);
