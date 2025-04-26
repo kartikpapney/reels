@@ -66,7 +66,6 @@ mongoose
     .catch((err) => console.error("MongoDB connection error:", err));
 
 // Middleware
-app.use(cors());
 app.use(express.json());
 
 // Error handling middleware
@@ -86,11 +85,11 @@ app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
 });
 
 // Health check endpoint
-app.get("/api/health", (req: Request, res: Response) => {
+app.get("/reels/health", (req: Request, res: Response) => {
     res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-app.get("/api", async (req: Request, res: Response, next: NextFunction) => {
+app.get("/reels", async (req: Request, res: Response, next: NextFunction) => {
     try {
 
         const minWatchedCountDoc = await Content.findOne().sort({ watchedCount: 1 }).limit(1);
