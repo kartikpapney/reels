@@ -1,0 +1,23 @@
+{"level":"info","message":"Cron job has been scheduled to run every 5 minutes","service":"cron-service","timestamp":"2025-04-26 21:47:05"}
+{"level":"info","message":"Cron service has started. Press Ctrl+C to stop.","service":"cron-service","timestamp":"2025-04-26 21:47:05"}
+{"level":"info","message":"Application is shutting down...","service":"cron-service","timestamp":"2025-04-26 21:47:11"}
+{"level":"info","message":"Cron job has been scheduled to run every 5 minutes","service":"cron-service","timestamp":"2025-04-26 21:47:32"}
+{"level":"info","message":"Cron service has started. Press Ctrl+C to stop.","service":"cron-service","timestamp":"2025-04-26 21:47:32"}
+{"level":"info","message":"Application is shutting down...","service":"cron-service","timestamp":"2025-04-26 21:47:50"}
+{"level":"info","message":"Cron job has been scheduled to run every 5 minutes","service":"cron-service","timestamp":"2025-04-26 21:47:54"}
+{"level":"info","message":"Cron service has started. Press Ctrl+C to stop.","service":"cron-service","timestamp":"2025-04-26 21:47:54"}
+{"level":"info","message":"Cron job started at 2025-04-26T16:18:00.483Z","service":"cron-service","timestamp":"2025-04-26 21:48:00"}
+{"level":"info","message":"Executing scheduled task...","service":"cron-service","timestamp":"2025-04-26 21:48:00"}
+{"level":"info","message":"Task execution completed successfully","service":"cron-service","timestamp":"2025-04-26 21:48:10"}
+{"level":"info","message":"Cron job completed at 2025-04-26T16:18:10.500Z (took 10.02s)","service":"cron-service","timestamp":"2025-04-26 21:48:10"}
+{"level":"info","message":"Application is shutting down...","service":"cron-service","timestamp":"2025-04-26 21:48:35"}
+{"level":"info","message":"Cron job has been scheduled to run every 5 minutes","service":"cron-service","timestamp":"2025-04-26 21:50:01"}
+{"level":"info","message":"Cron service has started. Press Ctrl+C to stop.","service":"cron-service","timestamp":"2025-04-26 21:50:01"}
+{"level":"info","message":"Application is shutting down...","service":"cron-service","timestamp":"2025-04-26 21:50:02"}
+{"level":"info","message":"Cron service has started. Press Ctrl+C to stop.","service":"cron-service","timestamp":"2025-04-26 21:51:15"}
+{"level":"info","message":"Cron job has been scheduled","service":"cron-service","timestamp":"2025-04-26 21:51:16"}
+{"level":"info","message":"Cron job started at 2025-04-26T16:22:00.831Z","service":"cron-service","timestamp":"2025-04-26 21:52:00"}
+{"level":"info","message":"Executing scheduled task...","service":"cron-service","timestamp":"2025-04-26 21:52:00"}
+{"level":"info","message":"Task execution completed successfully","service":"cron-service","timestamp":"2025-04-26 21:52:00"}
+{"level":"info","message":"Cron job completed at 2025-04-26T16:22:00.882Z (took 0.05s)","service":"cron-service","timestamp":"2025-04-26 21:52:00"}
+{"level":"info","message":"Application is shutting down...","service":"cron-service","timestamp":"2025-04-26 21:52:04"}
