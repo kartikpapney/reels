@@ -3,6 +3,8 @@ import express, { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import Content from "./schema/Content";
+import Book from "./schema/Book";
+
 
 dotenv.config();
 
