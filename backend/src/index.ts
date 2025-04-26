@@ -1,10 +1,9 @@
 import express, { Request, Response, NextFunction } from "express";
 
 import dotenv from "dotenv";
-import mongoose from "mongoose";
-import Content from "./schema/Content";
+import mongoose, { Schema } from "mongoose";
 import Book from "./schema/Book";
-
+import Content from "./schema/Content";
 
 dotenv.config();
 
@@ -14,7 +13,10 @@ const port = process.env.PORT || 3001;
 
 mongoose
     .connect(process.env.MONGO_URI || "")
-    .then(() => console.log("MongoDB connected!"))
+    .then(() => {
+        mongoose.model("Book", Book.schema);
+        console.log("MongoDB connected!")
+    })
     .catch((err) => console.error("MongoDB connection error:", err));
 
 // Middleware
