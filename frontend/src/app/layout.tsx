@@ -6,8 +6,8 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'PDF to Reels Converter',
-  description: 'Transform your PDF documents into engaging scrollable reels',
+  title: 'Reels',
+  description: 'Consume better content than Insta Reels',
 };
 
 export default function RootLayout({
