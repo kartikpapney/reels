@@ -20,7 +20,7 @@ const PADDING = 20;
 
 async function continueProcessingReels() {
     try {
-        const books = await Book.find();
+        const books = await Book.find({active: true});
 
         for (const book of books) {
             const reel = await Content.findOne({ bookId: book._id, watchedCount: 0 }).countDocuments();

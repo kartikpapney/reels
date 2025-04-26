@@ -3,6 +3,10 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const BookSchema = new Schema({
+    active: {
+        type: Boolean,
+        default: true, // defaults to true
+    },
     book: {
         type: String,
         required: true,
