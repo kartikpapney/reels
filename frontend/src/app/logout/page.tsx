@@ -12,7 +12,7 @@ export default function LogoutPage() {
         const performLogout = async () => {
             try {
                 // Call the server-side logout endpoint
-                await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reels/auth/logout`, {
+                await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
                     credentials: "include",
                     headers: {
                         "Content-Type": "application/json",

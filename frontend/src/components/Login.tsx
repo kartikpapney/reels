@@ -12,7 +12,7 @@ export default function Login() {
     // Updated API endpoint to match your backend routes
     useEffect(() => {
         // Check if user is already logged in
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/reels/api/user`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user`, {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
