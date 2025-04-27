@@ -6,7 +6,7 @@ import EnhancedReels from '@/components/EnhancedReels';
 
 export default function ReelsPage() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen" >
       <EnhancedReels />
     </main>
   );

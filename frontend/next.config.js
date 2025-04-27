@@ -8,9 +8,9 @@ const nextConfig = {
         canvas: false,
       };
     }
-    
+
     return config;
-  },
+  }
 };
 
 module.exports = nextConfig;

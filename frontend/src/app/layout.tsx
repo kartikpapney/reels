@@ -1,7 +1,8 @@
 // src/app/layout.tsx
-import './globals.css';
+import './styles/globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { AuthProvider } from '@/components/AuthContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,8 +22,11 @@ export default function RootLayout({
         {/* Add PDF.js CDN for PDF processing */}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
       </head>
+      
       <body className={inter.className}>
-        {children}
+      <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
