@@ -68,7 +68,7 @@ class CronService {
                     continue;
                 }
 
-                const filePath = path.join(__dirname, "./uploads", book.book);
+                const filePath = path.join(process.cwd(), "./uploads", book.book);
                 if (fs.existsSync(filePath) === false) {
                     console.error(`File not found: ${filePath}`);
                     continue;
