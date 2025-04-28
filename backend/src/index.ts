@@ -15,31 +15,31 @@ dotenv.config();
 
 // Create a logger helper function
 const logger = {
-  info: (message: string, data?: any) => {
-    console.log(`[INFO] ${new Date().toISOString()} - ${message}`, data ? JSON.stringify(data) : '');
-  },
-  error: (message: string, error: any) => {
-    console.error(`[ERROR] ${new Date().toISOString()} - ${message}`, error);
-  },
-  debug: (message: string, data?: any) => {
-    console.log(`[DEBUG] ${new Date().toISOString()} - ${message}`, data ? JSON.stringify(data) : '');
-  },
-  warn: (message: string, data?: any) => {
-    console.warn(`[WARN] ${new Date().toISOString()} - ${message}`, data ? JSON.stringify(data) : '');
-  }
+    info: (message: string, data?: any) => {
+        console.log(`[INFO] ${new Date().toISOString()} - ${message}`, data ? JSON.stringify(data) : "");
+    },
+    error: (message: string, error: any) => {
+        console.error(`[ERROR] ${new Date().toISOString()} - ${message}`, error);
+    },
+    debug: (message: string, data?: any) => {
+        console.log(`[DEBUG] ${new Date().toISOString()} - ${message}`, data ? JSON.stringify(data) : "");
+    },
+    warn: (message: string, data?: any) => {
+        console.warn(`[WARN] ${new Date().toISOString()} - ${message}`, data ? JSON.stringify(data) : "");
+    },
 };
 
 const app = express();
 const port = process.env.PORT || 3001;
 
 // Log environment variables (sanitized)
-logger.debug('Environment', {
-  NODE_ENV: process.env.NODE_ENV,
-  PORT: port,
-  MONGO_URI: process.env.MONGO_URI ? '****' : 'not set',
-  FRONTEND_URL: process.env.FRONTEND_URL,
-  GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL,
-  HAS_GOOGLE_CREDENTIALS: !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET)
+logger.debug("Environment", {
+    NODE_ENV: process.env.NODE_ENV,
+    PORT: port,
+    MONGO_URI: process.env.MONGO_URI ? "****" : "not set",
+    FRONTEND_URL: process.env.FRONTEND_URL,
+    GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL,
+    HAS_GOOGLE_CREDENTIALS: !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET),
 });
 
 // Step 3: Connect to MongoDB
@@ -53,31 +53,31 @@ mongoose
         logger.error("MongoDB connection error:", err);
         // Log more details about the connection attempt
         logger.debug("MongoDB connection details", {
-          uri: process.env.MONGO_URI ? process.env.MONGO_URI.substring(0, 15) + '...' : 'not set',
-          options: mongoose.connection.config
+            uri: process.env.MONGO_URI ? process.env.MONGO_URI.substring(0, 15) + "..." : "not set",
+            options: mongoose.connection.config,
         });
     });
 
 // Log all requests
 app.use((req: Request, res: Response, next: NextFunction) => {
-  logger.info(`Request received: ${req.method} ${req.url}`, {
-    headers: req.headers,
-    query: req.query,
-    ip: req.ip,
-  });
-  
-  // Capture response
-  const originalSend = res.send;
-  res.send = function(body) {
-    logger.debug(`Response sent: ${res.statusCode}`, {
-      path: req.url,
-      method: req.method,
-      responseSize: body ? body.length : 0
+    logger.info(`Request received: ${req.method} ${req.url}`, {
+        headers: req.headers,
+        query: req.query,
+        ip: req.ip,
     });
-    return originalSend.call(this, body);
-  };
-  
-  next();
+
+    // Capture response
+    const originalSend = res.send;
+    res.send = function (body) {
+        logger.debug(`Response sent: ${res.statusCode}`, {
+            path: req.url,
+            method: req.method,
+            responseSize: body ? body.length : 0,
+        });
+        return originalSend.call(this, body);
+    };
+
+    next();
 });
 
 // Step 4: Set up middleware
@@ -92,7 +92,7 @@ const corsOptions = {
     exposedHeaders: ["Location"],
 };
 
-logger.debug('CORS configuration', corsOptions);
+logger.debug("CORS configuration", corsOptions);
 
 app.use(cors(corsOptions));
 
@@ -103,16 +103,19 @@ const sessionOptions = {
     cookie: {
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
         secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" as const : "lax" as const,
+        domain: process.env.NODE_ENV === "production" ? '.kartikpapney.xyz' : undefined,
     },
+    proxy: process.env.NODE_ENV === "production", // Trust the reverse proxy when in production
 };
 
-logger.debug('Session configuration', {
+logger.debug("Session configuration", {
     ...sessionOptions,
-    secret: sessionOptions.secret ? '****' : 'not set',
+    secret: sessionOptions.secret ? "****" : "not set",
     cookie: {
         ...sessionOptions.cookie,
-        secure: sessionOptions.cookie.secure
-    }
+        secure: sessionOptions.cookie.secure,
+    },
 });
 
 app.use(session(sessionOptions));
@@ -129,49 +132,46 @@ const googleStrategyConfig = {
     scope: ["profile", "email"],
 };
 
-logger.debug('Google Strategy configuration', {
+logger.debug("Google Strategy configuration", {
     ...googleStrategyConfig,
-    clientID: googleStrategyConfig.clientID ? '****' : 'not set',
-    clientSecret: googleStrategyConfig.clientSecret ? '****' : 'not set',
+    clientID: googleStrategyConfig.clientID ? "****" : "not set",
+    clientSecret: googleStrategyConfig.clientSecret ? "****" : "not set",
 });
 
 passport.use(
-    new GoogleStrategy(
-        googleStrategyConfig,
-        async (accessToken, refreshToken, profile, done) => {
-            try {
-                logger.debug('Google auth callback received', { 
-                  profileId: profile.id,
-                  email: profile.emails?.[0]?.value,
-                  displayName: profile.displayName
+    new GoogleStrategy(googleStrategyConfig, async (accessToken, refreshToken, profile, done) => {
+        try {
+            logger.debug("Google auth callback received", {
+                profileId: profile.id,
+                email: profile.emails?.[0]?.value,
+                displayName: profile.displayName,
+            });
+
+            // Check if user already exists in database
+            let user = await User.findOne({ googleId: profile.id });
+
+            if (!user) {
+                logger.info(`Creating new user with Google ID: ${profile.id}`);
+                // Create new user if doesn't exist
+                user = await User.create({
+                    googleId: profile.id,
+                    email: profile.emails?.[0]?.value,
+                    displayName: profile.displayName,
+                    firstName: profile.name?.givenName,
+                    lastName: profile.name?.familyName,
+                    profilePicture: profile.photos?.[0]?.value,
                 });
-                
-                // Check if user already exists in database
-                let user = await User.findOne({ googleId: profile.id });
-
-                if (!user) {
-                    logger.info(`Creating new user with Google ID: ${profile.id}`);
-                    // Create new user if doesn't exist
-                    user = await User.create({
-                        googleId: profile.id,
-                        email: profile.emails?.[0]?.value,
-                        displayName: profile.displayName,
-                        firstName: profile.name?.givenName,
-                        lastName: profile.name?.familyName,
-                        profilePicture: profile.photos?.[0]?.value,
-                    });
-                    logger.info(`New user created: ${user._id}`);
-                } else {
-                    logger.info(`User found with Google ID: ${profile.id}`);
-                }
-
-                return done(null, user);
-            } catch (error) {
-                logger.error(`Error in Google auth callback:`, error);
-                return done(error as Error);
+                logger.info(`New user created: ${user._id}`);
+            } else {
+                logger.info(`User found with Google ID: ${profile.id}`);
             }
+
+            return done(null, user);
+        } catch (error) {
+            logger.error(`Error in Google auth callback:`, error);
+            return done(error as Error);
         }
-    )
+    })
 );
 
 // Step 7: Serialize and Deserialize User
@@ -200,25 +200,22 @@ app.get("/reels/auth/google", (req: Request, res: Response, next: NextFunction) 
     passport.authenticate("google", { scope: ["profile", "email"] })(req, res, next);
 });
 
-app.get(
-    "/reels/auth/google/callback",
-    (req: Request, res: Response, next: NextFunction) => {
-        logger.info(`Google auth callback received`);
-        passport.authenticate("google", {
-            failureRedirect: `${process.env.FRONTEND_URL}/login`,
-            successRedirect: `${process.env.FRONTEND_URL}/reels`,
-        })(req, res, next);
-    }
-);
+app.get("/reels/auth/google/callback", (req: Request, res: Response, next: NextFunction) => {
+    logger.info(`Google auth callback received`);
+    passport.authenticate("google", {
+        failureRedirect: `${process.env.FRONTEND_URL}/login`,
+        successRedirect: `${process.env.FRONTEND_URL}/reels`,
+    })(req, res, next);
+});
 
 app.get("/reels/auth/logout", (req: Request, res: Response) => {
-    logger.info(`Logout request received: ${req.user ? `User ID: ${(req.user as any)._id}` : 'No user'}`);
+    logger.info(`Logout request received: ${req.user ? `User ID: ${(req.user as any)._id}` : "No user"}`);
     req.logout((err) => {
         if (err) {
             logger.error("Error during logout:", err);
             return res.status(500).json({ error: "Logout failed" });
         }
-        
+
         logger.info(`User successfully logged out`);
         res.status(200).json({ success: true, message: "Logged out successfully" });
     });
@@ -254,9 +251,9 @@ app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
     logger.error(`Error handling request: ${req.method} ${req.url}`, {
         error: err.message,
         stack: err.stack,
-        status: err.status || 500
+        status: err.status || 500,
     });
-    
+
     const status = err.status || 500;
     res.status(status).json({
         error: {
@@ -270,12 +267,12 @@ app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
 app.get("/reels/health", (req: Request, res: Response) => {
     logger.debug(`Health check request received`);
     const healthData = {
-        status: "ok", 
+        status: "ok",
         timestamp: new Date().toISOString(),
         environment: process.env.NODE_ENV,
-        mongoConnection: mongoose.connection.readyState === 1 ? "connected" : "disconnected"
+        mongoConnection: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
     };
-    
+
     res.status(200).json(healthData);
 });
 
@@ -285,7 +282,7 @@ app.get("/reels", isAuthenticated, async (req: Request, res: Response, next: Nex
         // @ts-ignore
         const userId = new mongoose.Types.ObjectId(req.user._id);
         logger.debug(`Fetching reels for user: ${userId}`);
-        
+
         const seenContentDocs = await UserContentSeen.find({ userId }).select("contentId");
         const seenContentIds = seenContentDocs.map((doc) => doc.contentId);
         logger.debug(`User has seen ${seenContentIds.length} content items`);
@@ -337,9 +334,9 @@ app.put("/reels/:contentId/seen", isAuthenticated, async (req: Request, res: Res
             Content.updateOne({ _id: contentId }, { $inc: { watchedCount: 1 } }),
         ]);
 
-        logger.debug(`Content marked as seen:`, { 
-          userContentResult: result[0], 
-          contentUpdateResult: result[1] 
+        logger.debug(`Content marked as seen:`, {
+            userContentResult: result[0],
+            contentUpdateResult: result[1],
         });
 
         return res.status(200).json({ message: "Content marked as seen" });
@@ -350,32 +347,32 @@ app.put("/reels/:contentId/seen", isAuthenticated, async (req: Request, res: Res
 });
 
 app.get("/reels/book", isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
-  try {
-      logger.debug(`Fetching active books`);
-      const books = await Book.find({ active: true }).lean();
-      logger.debug(`Found ${books.length} active books`);
+    try {
+        logger.debug(`Fetching active books`);
+        const books = await Book.find({ active: true }).lean();
+        logger.debug(`Found ${books.length} active books`);
 
-      return res.status(200).json({ books });
-  } catch (error) {
-      logger.error("Error fetching books:", error);
-      next(error);
-  }
+        return res.status(200).json({ books });
+    } catch (error) {
+        logger.error("Error fetching books:", error);
+        next(error);
+    }
 });
 
 app.listen(port, () => {
-    logger.info(`Server started and running on port ${port} in ${process.env.NODE_ENV || 'development'} mode`);
+    logger.info(`Server started and running on port ${port} in ${process.env.NODE_ENV || "development"} mode`);
     logger.debug(`Server configuration:`, {
         mongoConnection: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
         sessionSecret: process.env.SESSION_SECRET ? "configured" : "using default",
-        corsOrigin: process.env.FRONTEND_URL || "not set"
+        corsOrigin: process.env.FRONTEND_URL || "not set",
     });
 });
 
 // Handle uncaught exceptions and rejections
-process.on('uncaughtException', (error) => {
-  logger.error('Uncaught Exception:', error);
+process.on("uncaughtException", (error) => {
+    logger.error("Uncaught Exception:", error);
 });
 
-process.on('unhandledRejection', (reason, promise) => {
-  logger.error('Unhandled Rejection:', { reason, promise });
+process.on("unhandledRejection", (reason, promise) => {
+    logger.error("Unhandled Rejection:", { reason, promise });
 });
