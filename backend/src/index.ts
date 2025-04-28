@@ -28,12 +28,14 @@ mongoose
 // Step 4: Set up middleware
 app.use(express.json());
 app.use(cookieParser());
+
 app.use(
     cors({
-        origin: process.env.FRONTEND_URL || "http://localhost:3000",
-        credentials: true, // This is critical - it enables the 'Access-Control-Allow-Credentials' header
+        origin: [process.env.FRONTEND_URL ?? ""], // Include all domains
+        credentials: true,
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"],
+        allowedHeaders: ["Content-Type", "Authorization", "Accept", "Origin", "X-Requested-With"],
+        exposedHeaders: ["Location"], // Expose redirect headers
     })
 );
 app.use(
@@ -117,7 +119,8 @@ app.get("/reels/auth/logout", (req: Request, res: Response) => {
             console.error("Error during logout:", err);
             return res.status(500).json({ error: "Logout failed" });
         }
-        res.redirect(`${process.env.FRONTEND_URL ?? ""}`);
+        
+        res.status(200).json({ success: true, message: "Logged out successfully" });
     });
 });
 

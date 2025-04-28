@@ -64,7 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     const logout = () => {
-        window.location.href = process.env.NEXT_PUBLIC_API_URL+"/auth/logout";
+        window.location.href = process.env.NEXT_PUBLIC_FRONTEND_URL ?? "";
     };
 
     const value = {
